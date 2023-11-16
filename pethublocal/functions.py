@@ -32,6 +32,10 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 LastMessageFromHub = datetime.utcnow()
 
+def external_dns_query_alt(host, internal=False):
+    pass
+
+
 def external_dns_query(host, internal=False):
     """
      Query DNS entries outside default DNS server to retrieve IP address. This is so the

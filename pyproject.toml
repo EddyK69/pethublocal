@@ -23,7 +23,7 @@ keywords = ["pethublocal", "surepetcare", "home-assistant"]
 license = "GPLv3"
 name = "pethublocal"
 readme = "README.md"
-repository = "https://github.com/PetHubLocal/pethublocal"
+repository = "https://github.com/EddyK69/pethublocal"
 version = "2.0"
 
 [tool.poetry.dependencies]
