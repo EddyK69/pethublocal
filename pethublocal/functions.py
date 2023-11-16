@@ -32,11 +32,34 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 LastMessageFromHub = datetime.utcnow()
 
-def external_dns_query_alt(host, internal=False):
-    pass
-
 
 def external_dns_query(host, internal=False):
+    """
+     Query DNS entries outside default DNS server to retrieve IP address. This is so the
+     public IP hub.api.surehub.io which is used by the hub can be queried from Google DNS
+     rather than using the internal DNS server, as the host should have been poisoned so
+     the local hub points to this service, but we need to query the real one.
+    """
+
+    retval = '127.0.0.1'
+    if internal:
+        resolver = dns.resolver.Resolver(configure=internal)
+        answer = dns.resolver.resolve(host, 'A')
+        if answer:
+            retval = str(answer[0])
+    else:
+        api_url = 'https://dns.google.com/resolve?'
+        params = {'name': host, 'type': 'A'}
+        try:
+            response = requests.get(api_url, params=params)
+            answer = response.json()['Answer']
+            retval = answer[1]['data']
+        except requests.exceptions.RequestException:
+            return retval
+    return retval
+ 
+
+def external_dns_query_org(host, internal=False):
     """
      Query DNS entries outside default DNS server to retrieve IP address. This is so the
      public IP hub.api.surehub.io which is used by the hub can be queried from Google DNS
